@@ -1,1 +1,4 @@
 console.enabled: true
+status.allowAnonymous: true
+server.name: almanac_kibana
+server.host: 0.0.0.0
