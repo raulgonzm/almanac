@@ -1,0 +1,18 @@
+version: "2"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/go/src/github.com/raulgonz/almanac/server
+    working_dir: /go/src/github.com/raulgonz/almanac/server
+    entrypoint:
+          - /bin/sh
+          - -c
+          - |
+              go get
+              go run server.go
+    ports:
+          - "8082:8080"
