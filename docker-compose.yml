@@ -1,6 +1,30 @@
-version: "2"
+version: "3"
+
+networks:
+  local:
 
 services:
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+    container_name: almanac_elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      local:
+        aliases:
+          - elasticsearch
+
   app:
     build:
       context: .
@@ -16,3 +40,9 @@ services:
               go run server.go
     ports:
           - "8082:8080"
+    networks:
+      local:
+
+volumes:
+  esdata1:
+    driver: local
