@@ -25,6 +25,26 @@ services:
         aliases:
           - elasticsearch
 
+  kibana:
+      image: docker.elastic.co/kibana/kibana:6.3.0
+      links:
+        - elasticsearch
+      ports:
+        - 5601:5601
+      environment:
+        - "ELASTICSEARCH_URL=http://elasticsearch:9200"
+      healthcheck:
+          test: ["CMD", "curl", "-f", "http://kibana:5601"]
+          interval: 10s
+          timeout: 10s
+          retries: 10
+      volumes:
+          - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+      networks:
+        local:
+          aliases:
+            - kibana
+
   app:
     build:
       context: .
